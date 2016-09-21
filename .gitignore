@@ -1,12 +1,82 @@
-*.class
+import java.text.*;
+import java.util.*;
+public class Coupon {
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+	private Item itemName;
+	private String expiration;
+	private boolean valid;
+	private int cpType;
+	
+	
+	public Coupon(int coupon)
+	{
+		cpType = coupon;
+	}
+	
+	
+	public Coupon(Item couponItem, String expirDate)
+	{
+		itemName = couponItem;
+		expiration = expirDate;
+		valid = false;
+	}
+	
+	
+	public Item getName()
+	{
+		return itemName;
+	}
+	
+	
+	public int getCouponType()
+	{
+		return cpType;
+	}
+	
+	public void setCouponType(String couponNum)
+	{
+		switch(couponNum)
+		{
+		case "Buy one get one free":
+			cpType = 1;
+			break;
+		case "Buy one get one half-off":
+			cpType = 2;
+			break;
+		case "Get 50% off":
+			cpType = 3;
+			break;
+		case "Get 1 free product":
+			cpType = 4;
+		default: 
+			cpType = 0;
+		
+		}
+	}
+	public boolean isValid()
+	{
+		SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy");
+		Date today = new Date();
+		try 
+		{
+			Date expired = date.parse(expiration);
+			if (expired.before(today) )
+			{
 
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+				System.out.println("invalid");
+				valid = false;
+			}
+			
+			else if (expired.after(today))
+			{
+				System.out.println("valid");
+				valid = true;
+			}
+		}
+		catch (ParseException e) 
+		{
+			e.printStackTrace();
+		}
+		return valid;
+	}
+}
